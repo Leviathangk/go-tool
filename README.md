@@ -58,7 +58,7 @@ if err != nil {
 针对大文件的写入，每次写入都会刷新到硬盘
 
 ```
-writer, err := file.WriteByte("D:\\ddd2.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND|os.O_TRUNC, 0666)
+writer, err := file.WriteByte("D:\\ddd2.txt", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
 if err != nil {
 	log.Fatalln(err)
 }
