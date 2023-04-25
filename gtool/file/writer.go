@@ -1,4 +1,4 @@
-// package file reader 是用来快速读取文件的
+// package file writer 是用来快速写入文件的
 package file
 
 import (
