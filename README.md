@@ -47,7 +47,7 @@ if err != nil {
 ### 一次性写入
 
 ```
-err := file.WriteAll("D:\\ddd2.txt", []byte("demo"), os.O_CREATE|os.O_WRONLY|os.O_APPEND|os.O_TRUNC, 0666)
+err := file.WriteAll("D:\\ddd2.txt", []byte("demo"), os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
 if err != nil {
 	log.Fatalln(err)
 }

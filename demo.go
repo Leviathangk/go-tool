@@ -26,7 +26,7 @@ func main() {
 	// 	log.Fatalln(err)
 	// }
 
-	// writer, err := file.WriteByte("D:\\ddd2.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND|os.O_TRUNC, 0666)
+	// writer, err := file.WriteByte("D:\\ddd2.txt", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
 	// if err != nil {
 	// 	log.Fatalln(err)
 	// }
