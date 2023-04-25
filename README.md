@@ -2,6 +2,11 @@
 
 gtool 是一个使用 go 标准库写的用来简化操作的库
 
+# 安装
+```
+go get github.com/Leviathangk/go-tool@latest
+```
+
 # file
 
 文件处理库
