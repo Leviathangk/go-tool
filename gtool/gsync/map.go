@@ -1,4 +1,4 @@
-// Package gsync 并发 map，但是获取数据后需要转换
+// Package gsync 并发 map，但是获取数据后需要转换，或者使用 sync.Map
 package gsync
 
 import "sync"
