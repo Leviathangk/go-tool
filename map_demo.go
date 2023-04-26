@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-func main() {
+func mapDemo() {
 	m := gsync.NewMap()
 	m.Set("key", "value")
 	fmt.Println(m.Get("key"))

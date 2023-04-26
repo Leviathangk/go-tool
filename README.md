@@ -119,3 +119,34 @@ m.Range(func(key, value interface{}) {
 
 fmt.Println(m.GetOrSet("key2", "value2"))
 ```
+
+# generic
+
+使用泛型构建的一些列包
+
+## gslice
+
+针对切片数组的一系列操作
+
+- Append
+- Insert
+- Remove
+- Pop
+- Shift
+- Copy
+- Range
+- IndexOf
+- Exists
+
+示例
+
+```
+res := gslice.Insert([]int{1, 2, 3, 4, 5, 6}, 0, 8)
+fmt.Println(res)
+
+res = gslice.Remove([]int{1, 2, 3, 4, 5, 6}, 1)
+fmt.Println(res)
+
+res2 := gslice.Exists([]int{1, 2, 3, 4, 5, 6}, 7)
+fmt.Println(res2)
+```
