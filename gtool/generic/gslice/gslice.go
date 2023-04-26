@@ -10,8 +10,32 @@ func Insert[T any](s []T, index int, elems T) []T {
 	return append(s[:index], append([]T{elems}, s[index:]...)...)
 }
 
-// Remove 移除指定索引的数据
-func Remove[T any](s []T, index int) []T {
+// Remove 移除指定值的数据
+// nums <= 0 清除所有指定值的数据
+// nums > 0 清除指定数量的指定值的数据
+func Remove[T comparable](s []T, value T, nums int) []T {
+	count := 0
+	length := len(s)
+
+	for i := 0; i < length; i++ {
+		if s[i-count] == value {
+			if nums <= 0 {
+				s = append(s[:i-count], s[i-count+1:]...)
+				count += 1
+			} else if nums > 0 && count != nums {
+				s = append(s[:i-count], s[i-count+1:]...)
+				count += 1
+			} else {
+				break
+			}
+		}
+	}
+
+	return s
+}
+
+// RemoveByIndex 移除指定索引的数据
+func RemoveByIndex[T any](s []T, index int) []T {
 	return append(s[:index], s[index+1:]...)
 }
 
@@ -20,14 +44,14 @@ func Pop[T any](s []T) ([]T, T) {
 	index := len(s) - 1
 	last := s[index]
 
-	return Remove(s, index), last
+	return RemoveByIndex(s, index), last
 }
 
 // Shift 移除头部元素
 func Shift[T any](s []T) ([]T, T) {
 	last := s[0]
 
-	return Remove(s, 0), last
+	return RemoveByIndex(s, 0), last
 }
 
 // Copy 复制一份，返回副本

@@ -141,6 +141,7 @@ fmt.Println(m.GetOrSet("key2", "value2"))
 - Append
 - Insert
 - Remove
+- RemoveByIndex
 - Pop
 - Shift
 - Copy
@@ -154,7 +155,7 @@ fmt.Println(m.GetOrSet("key2", "value2"))
 res := gslice.Insert([]int{1, 2, 3, 4, 5, 6}, 0, 8)
 fmt.Println(res)
 
-res = gslice.Remove([]int{1, 2, 3, 4, 5, 6}, 1)
+res = gslice.Remove([]int{1, 1, 5, 67, 1, 2, 1, 3, 1}, 1, 0)
 fmt.Println(res)
 
 res2 := gslice.Exists([]int{1, 2, 3, 4, 5, 6}, 7)
