@@ -5,7 +5,7 @@ import (
 	"github.com/Leviathangk/go-tool/gtool/file"
 )
 
-func main() {
+func main2() {
 	// content, err := file.ReadAll("D:\\ddd.txt")
 	// if err != nil {
 	// 	log.Fatalln(err)

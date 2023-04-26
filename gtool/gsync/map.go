@@ -5,45 +5,57 @@ import "sync"
 
 // SyncMap 并发 map
 type SyncMap struct {
-	Map  *map[interface{}]interface{} // map
-	lock sync.RWMutex                 // 读写锁
+	Map  map[interface{}]interface{} // map
+	Lock sync.RWMutex                // 读写锁
 }
 
 // NewMap 创建并发 map
 func NewMap() *SyncMap {
 	return &SyncMap{
-		Map: &map[interface{}]interface{}{},
+		Map: map[interface{}]interface{}{},
 	}
 }
 
 // Get 并发读
-func (sm *SyncMap) Get(key interface{}) interface{} {
-	sm.lock.RLock()
-	defer sm.lock.RUnlock()
+func (sm *SyncMap) Get(key interface{}) (interface{}, bool) {
+	sm.Lock.RLock()
+	defer sm.Lock.RUnlock()
 
-	m := *sm.Map
-	if v, ok := m[key]; ok {
+	v, ok := sm.Map[key]
+	return v, ok
+}
+
+// GetOrSet 获取不到就设置
+func (sm *SyncMap) GetOrSet(key interface{}, value interface{}) interface{} {
+	sm.Lock.RLock()
+
+	// 获取 key
+	if v, ok := sm.Map[key]; ok {
+		sm.Lock.RUnlock()
 		return v
 	}
-	return nil
+	sm.Lock.RUnlock()
+
+	// 设置 key、value
+	sm.Set(key, value)
+
+	return value
 }
 
 // Set 并发写
 func (sm *SyncMap) Set(key interface{}, value interface{}) {
-	sm.lock.Lock()
-	defer sm.lock.Unlock()
+	sm.Lock.Lock()
+	defer sm.Lock.Unlock()
 
-	m := *sm.Map
-	m[key] = value
+	sm.Map[key] = value
 }
 
 // Exists 并发判断
 func (sm *SyncMap) Exists(key interface{}) bool {
-	sm.lock.RLock()
-	defer sm.lock.RUnlock()
+	sm.Lock.RLock()
+	defer sm.Lock.RUnlock()
 
-	m := *sm.Map
-	if _, ok := m[key]; ok {
+	if _, ok := sm.Map[key]; ok {
 		return true
 	}
 
@@ -52,9 +64,18 @@ func (sm *SyncMap) Exists(key interface{}) bool {
 
 // Delete 并发删
 func (sm *SyncMap) Delete(key interface{}) {
-	sm.lock.Lock()
-	defer sm.lock.Unlock()
+	sm.Lock.Lock()
+	defer sm.Lock.Unlock()
 
-	m := *sm.Map
-	delete(m, key)
+	delete(sm.Map, key)
+}
+
+// Range 遍历
+func (sm *SyncMap) Range(f func(key, value interface{})) {
+	sm.Lock.RLock()
+	defer sm.Lock.RUnlock()
+
+	for key, value := range sm.Map {
+		f(key, value)
+	}
 }

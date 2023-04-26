@@ -3,6 +3,7 @@
 gtool 是一个使用 go 标准库写的用来简化操作的库
 
 # 安装
+
 ```
 go get github.com/Leviathangk/go-tool@latest
 ```
@@ -97,4 +98,24 @@ _ := file.RemoveDir("")
 ```
 err := file.MoveTo("D:\\dddd", "D:\\dddd2")
 fmt.Println(err)
+```
+
+# gsync
+
+这是处理并发的
+
+## map
+
+并发 map，或者使用 sync.Map
+
+```
+m := gsync.NewMap()
+m.Set("key", "value")
+fmt.Println(m.Get("key"))
+
+m.Range(func(key, value interface{}) {
+    fmt.Printf("%v -> %v\n", key, value)
+})
+
+fmt.Println(m.GetOrSet("key2", "value2"))
 ```
