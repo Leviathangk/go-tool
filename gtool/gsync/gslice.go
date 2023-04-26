@@ -1,4 +1,4 @@
-// Package SyncSlice 并发 slice
+// Package gsync 并发 slice
 package gsync
 
 import "sync"
