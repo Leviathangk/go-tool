@@ -1,23 +1,22 @@
-// Package gsync 并发 map，但是获取数据后需要转换，或者使用 sync.Map
-package gsync
+package gmap
 
 import "sync"
 
 // SyncMap 并发 map
-type SyncMap struct {
-	Map  map[interface{}]interface{} // map
-	Lock sync.RWMutex                // 读写锁
+type SyncMap[KEY comparable, VALUE any] struct {
+	Map  map[KEY]VALUE // map
+	Lock sync.RWMutex  // 读写锁
 }
 
 // NewMap 创建并发 map
-func NewMap() *SyncMap {
-	return &SyncMap{
-		Map: map[interface{}]interface{}{},
+func NewMap[KEY comparable, VALUE any]() *SyncMap[KEY, VALUE] {
+	return &SyncMap[KEY, VALUE]{
+		Map: map[KEY]VALUE{},
 	}
 }
 
 // Get 并发读
-func (sm *SyncMap) Get(key interface{}) (interface{}, bool) {
+func (sm *SyncMap[KEY, VALUE]) Get(key KEY) (VALUE, bool) {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
 
@@ -26,7 +25,7 @@ func (sm *SyncMap) Get(key interface{}) (interface{}, bool) {
 }
 
 // GetOrSet 获取不到就设置
-func (sm *SyncMap) GetOrSet(key interface{}, value interface{}) interface{} {
+func (sm *SyncMap[KEY, VALUE]) GetOrSet(key KEY, value VALUE) VALUE {
 	sm.Lock.RLock()
 
 	// 获取 key
@@ -43,7 +42,7 @@ func (sm *SyncMap) GetOrSet(key interface{}, value interface{}) interface{} {
 }
 
 // Set 并发写
-func (sm *SyncMap) Set(key interface{}, value interface{}) {
+func (sm *SyncMap[KEY, VALUE]) Set(key KEY, value VALUE) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
 
@@ -51,7 +50,7 @@ func (sm *SyncMap) Set(key interface{}, value interface{}) {
 }
 
 // Exists 并发判断
-func (sm *SyncMap) Exists(key interface{}) bool {
+func (sm *SyncMap[KEY, VALUE]) Exists(key KEY) bool {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
 
@@ -63,7 +62,7 @@ func (sm *SyncMap) Exists(key interface{}) bool {
 }
 
 // Delete 并发删
-func (sm *SyncMap) Delete(key interface{}) {
+func (sm *SyncMap[KEY, VALUE]) Delete(key KEY) {
 	sm.Lock.Lock()
 	defer sm.Lock.Unlock()
 
@@ -71,7 +70,7 @@ func (sm *SyncMap) Delete(key interface{}) {
 }
 
 // Range 遍历
-func (sm *SyncMap) Range(f func(key, value interface{})) {
+func (sm *SyncMap[KEY, VALUE]) Range(f func(key KEY, value VALUE)) {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
 

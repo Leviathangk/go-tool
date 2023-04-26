@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/Leviathangk/go-tool/gtool/gsync"
+	"github.com/Leviathangk/go-tool/gtool/generic/gmap"
 	"sync"
 )
 
 func mapDemo() {
-	m := gsync.NewMap()
+	m := gmap.NewMap[string, string]()
 	m.Set("key", "value")
 	fmt.Println(m.Get("key"))
 
-	m.Range(func(key, value interface{}) {
+	m.Range(func(key string, value string) {
 		fmt.Printf("%v -> %v\n", key, value)
 	})
 

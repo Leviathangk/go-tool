@@ -1,6 +1,11 @@
 # 介绍
 
-gtool 是一个使用 go 标准库写的用来简化操作的库
+gtool 是一个使用 go 标准库写的用来简化操作的库  
+目前主要实现
+
+- file 文件处理
+- gmap 泛型 map（并发安全）
+- gslice 泛型切片（含有多种切片方法）
 
 # 安装
 
@@ -100,29 +105,34 @@ err := file.MoveTo("D:\\dddd", "D:\\dddd2")
 fmt.Println(err)
 ```
 
-# gsync
+# generic
 
-这是处理并发的
+使用泛型构建的一些包
 
-## map
+## gmap
 
-并发 map，或者使用 sync.Map
+并发安全的 map，由于是泛型，避免了转换  
+如果使用 sync.Map，那么需要额外的转换
+有以下方法
+
+- Get
+- GetOrSet
+- Set
+- Exists
+- Delete
+- Range
 
 ```
-m := gsync.NewMap()
+m := gmap.NewMap[string, string]()
 m.Set("key", "value")
 fmt.Println(m.Get("key"))
 
-m.Range(func(key, value interface{}) {
+m.Range(func(key string, value string) {
     fmt.Printf("%v -> %v\n", key, value)
 })
 
 fmt.Println(m.GetOrSet("key2", "value2"))
 ```
-
-# generic
-
-使用泛型构建的一些列包
 
 ## gslice
 
