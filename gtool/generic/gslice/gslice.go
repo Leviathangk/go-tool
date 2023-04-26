@@ -45,7 +45,7 @@ func Range[T any](s []T, f func(index int, value T)) {
 	}
 }
 
-// IndexOf 返回指定值的索引，无则为 -1
+// IndexOf 返回指定值第一次出现的索引，无则为 -1
 func IndexOf[T comparable](s []T, v T) int {
 	for index, value := range s {
 		if value == v {
