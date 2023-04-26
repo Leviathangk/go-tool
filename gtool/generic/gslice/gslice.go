@@ -49,9 +49,9 @@ func Pop[T any](s []T) ([]T, T) {
 
 // Shift 移除头部元素
 func Shift[T any](s []T) ([]T, T) {
-	last := s[0]
+	first := s[0]
 
-	return RemoveByIndex(s, 0), last
+	return RemoveByIndex(s, 0), first
 }
 
 // Copy 复制一份，返回副本
