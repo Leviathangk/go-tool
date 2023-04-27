@@ -1,46 +1,31 @@
-// Package gsync 并发 slice
-package gsync
+package gslice
 
-import (
-	"sync"
-)
-
-// SyncSlice 并发切片
-type SyncSlice[T comparable] struct {
-	Slice        []T // slice
-	sync.RWMutex     // 读写锁
+// GSlice 泛型切片
+type GSlice[T comparable] struct {
+	Slice []T // GSlice
 }
 
 // NewSlice 创建切片
-func NewSlice[T comparable]() *SyncSlice[T] {
-	return &SyncSlice[T]{
+func NewSlice[T comparable]() *GSlice[T] {
+	return &GSlice[T]{
 		Slice: []T{},
 	}
 }
 
 // Append 添加元素
-func (gs *SyncSlice[T]) Append(ele ...T) {
-	gs.Lock()
-	defer gs.Unlock()
-
+func (gs *GSlice[T]) Append(ele ...T) {
 	gs.Slice = append(gs.Slice, ele...)
 }
 
 // Insert 在指定索引插入数据
-func (gs *SyncSlice[T]) Insert(index int, elems T) {
-	gs.Lock()
-	defer gs.Unlock()
-
+func (gs *GSlice[T]) Insert(index int, elems T) {
 	gs.Slice = append(gs.Slice[:index], append([]T{elems}, gs.Slice[index:]...)...)
 }
 
 // Remove 移除指定值的数据
 // nums <= 0 清除所有指定值的数据
 // nums > 0 清除指定数量的指定值的数据
-func (gs *SyncSlice[T]) Remove(value T, nums int) {
-	gs.Lock()
-	defer gs.Unlock()
-
+func (gs *GSlice[T]) Remove(value T, nums int) {
 	count := 0
 	length := len(gs.Slice)
 
@@ -60,18 +45,12 @@ func (gs *SyncSlice[T]) Remove(value T, nums int) {
 }
 
 // RemoveByIndex 移除指定索引的数据
-func (gs *SyncSlice[T]) RemoveByIndex(index int) {
-	gs.Lock()
-	defer gs.Unlock()
-
+func (gs *GSlice[T]) RemoveByIndex(index int) {
 	gs.Slice = append(gs.Slice[:index], gs.Slice[index+1:]...)
 }
 
 // Pop 移除末尾元素
-func (gs *SyncSlice[T]) Pop() T {
-	gs.Lock()
-	defer gs.Unlock()
-
+func (gs *GSlice[T]) Pop() T {
 	index := len(gs.Slice) - 1
 	last := gs.Slice[index]
 	gs.Slice = append(gs.Slice[:index], gs.Slice[index+1:]...)
@@ -80,10 +59,7 @@ func (gs *SyncSlice[T]) Pop() T {
 }
 
 // Shift 移除头部元素
-func (gs *SyncSlice[T]) Shift() T {
-	gs.Lock()
-	defer gs.Unlock()
-
+func (gs *GSlice[T]) Shift() T {
 	first := gs.Slice[0]
 	gs.Slice = append([]T{}, gs.Slice[1:]...)
 
@@ -91,10 +67,7 @@ func (gs *SyncSlice[T]) Shift() T {
 }
 
 // Copy 复制一份，返回副本
-func (gs *SyncSlice[T]) Copy() []T {
-	gs.RLock()
-	defer gs.RUnlock()
-
+func (gs *GSlice[T]) Copy() []T {
 	newS := make([]T, gs.Length())
 	copy(newS, gs.Slice)
 
@@ -102,20 +75,14 @@ func (gs *SyncSlice[T]) Copy() []T {
 }
 
 // Range 遍历
-func (gs *SyncSlice[T]) Range(f func(index int, value T)) {
-	gs.RLock()
-	defer gs.RUnlock()
-
+func (gs *GSlice[T]) Range(f func(index int, value T)) {
 	for index, value := range gs.Slice {
 		f(index, value)
 	}
 }
 
 // IndexOf 返回指定值第一次出现的索引，无则为 -1
-func (gs *SyncSlice[T]) IndexOf(v T) int {
-	gs.RLock()
-	defer gs.RUnlock()
-
+func (gs *GSlice[T]) IndexOf(v T) int {
 	for index, value := range gs.Slice {
 		if value == v {
 			return index
@@ -126,15 +93,12 @@ func (gs *SyncSlice[T]) IndexOf(v T) int {
 }
 
 // Exists 判断指定值是否存在
-func (gs *SyncSlice[T]) Exists(v T) bool {
+func (gs *GSlice[T]) Exists(v T) bool {
 	return gs.IndexOf(v) != -1
 }
 
 // Get 获取元素：支持负数访问
-func (gs *SyncSlice[T]) Get(index int) T {
-	gs.RLock()
-	defer gs.RUnlock()
-
+func (gs *GSlice[T]) Get(index int) T {
 	if index < 0 {
 		index = gs.Length() + index
 	}
@@ -143,9 +107,6 @@ func (gs *SyncSlice[T]) Get(index int) T {
 }
 
 // Length 获取长度
-func (gs *SyncSlice[T]) Length() int {
-	gs.RLock()
-	defer gs.RUnlock()
-
+func (gs *GSlice[T]) Length() int {
 	return len(gs.Slice)
 }

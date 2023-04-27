@@ -1,39 +1,29 @@
 package gmap
 
-import "sync"
-
-// SyncMap 并发 map
-type SyncMap[KEY comparable, VALUE any] struct {
-	Map  map[KEY]VALUE // map
-	Lock sync.RWMutex  // 读写锁
+// GMap map
+type GMap[KEY comparable, VALUE any] struct {
+	Map map[KEY]VALUE
 }
 
-// NewMap 创建并发 map
-func NewMap[KEY comparable, VALUE any]() *SyncMap[KEY, VALUE] {
-	return &SyncMap[KEY, VALUE]{
+// NewMap 创建 map
+func NewMap[KEY comparable, VALUE any]() *GMap[KEY, VALUE] {
+	return &GMap[KEY, VALUE]{
 		Map: map[KEY]VALUE{},
 	}
 }
 
-// Get 并发读
-func (sm *SyncMap[KEY, VALUE]) Get(key KEY) (VALUE, bool) {
-	sm.Lock.RLock()
-	defer sm.Lock.RUnlock()
-
+// Get 读
+func (sm *GMap[KEY, VALUE]) Get(key KEY) (VALUE, bool) {
 	v, ok := sm.Map[key]
 	return v, ok
 }
 
 // GetOrSet 获取不到就设置
-func (sm *SyncMap[KEY, VALUE]) GetOrSet(key KEY, value VALUE) VALUE {
-	sm.Lock.RLock()
-
+func (sm *GMap[KEY, VALUE]) GetOrSet(key KEY, value VALUE) VALUE {
 	// 获取 key
 	if v, ok := sm.Map[key]; ok {
-		sm.Lock.RUnlock()
 		return v
 	}
-	sm.Lock.RUnlock()
 
 	// 设置 key、value
 	sm.Set(key, value)
@@ -41,19 +31,13 @@ func (sm *SyncMap[KEY, VALUE]) GetOrSet(key KEY, value VALUE) VALUE {
 	return value
 }
 
-// Set 并发写
-func (sm *SyncMap[KEY, VALUE]) Set(key KEY, value VALUE) {
-	sm.Lock.Lock()
-	defer sm.Lock.Unlock()
-
+// Set 写
+func (sm *GMap[KEY, VALUE]) Set(key KEY, value VALUE) {
 	sm.Map[key] = value
 }
 
-// Exists 并发判断
-func (sm *SyncMap[KEY, VALUE]) Exists(key KEY) bool {
-	sm.Lock.RLock()
-	defer sm.Lock.RUnlock()
-
+// Exists 判断
+func (sm *GMap[KEY, VALUE]) Exists(key KEY) bool {
 	if _, ok := sm.Map[key]; ok {
 		return true
 	}
@@ -61,19 +45,13 @@ func (sm *SyncMap[KEY, VALUE]) Exists(key KEY) bool {
 	return false
 }
 
-// Delete 并发删
-func (sm *SyncMap[KEY, VALUE]) Delete(key KEY) {
-	sm.Lock.Lock()
-	defer sm.Lock.Unlock()
-
+// Delete 删
+func (sm *GMap[KEY, VALUE]) Delete(key KEY) {
 	delete(sm.Map, key)
 }
 
 // Range 遍历
-func (sm *SyncMap[KEY, VALUE]) Range(f func(key KEY, value VALUE)) {
-	sm.Lock.RLock()
-	defer sm.Lock.RUnlock()
-
+func (sm *GMap[KEY, VALUE]) Range(f func(key KEY, value VALUE)) {
 	for key, value := range sm.Map {
 		f(key, value)
 	}

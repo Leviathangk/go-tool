@@ -2,25 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/Leviathangk/go-tool/gtool/gsync"
+	"github.com/Leviathangk/go-tool/gtool/generic/gmap"
 )
 
 func main() {
-	// 并发 slice
-	s := gsync.NewSlice[int]()
-	s.Append(1, 2, 3, 4)
+	m := gmap.NewMap[string, string]()
+	m.Set("key", "value")
+	fmt.Println(m.Get("key"))
 
-	res := s.Shift()
-	fmt.Println(res)
-	fmt.Println(s.Slice)
+	m.Range(func(key string, value string) {
+		fmt.Printf("%v -> %v\n", key, value)
+	})
 
-	// 并发 map
-	m := gsync.NewMap[int, int]()
-	m.Set(1, 1)
-	m.Set(2, 2)
-
-	v, ok := m.Get(1)
-	if ok {
-		fmt.Println(v)
-	}
+	fmt.Println(m.GetOrSet("key2", "value2"))
 }

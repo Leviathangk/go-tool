@@ -107,12 +107,11 @@ fmt.Println(err)
 
 # generic
 
-使用泛型构建的一些包
+使用泛型构建的一些包，不含并发包
 
 ## gmap
 
-并发安全的 map，由于是泛型，避免了转换  
-如果使用 sync.Map，那么需要额外的转换
+是泛型 map，避免了转换  
 有以下方法
 
 - Get
@@ -135,6 +134,8 @@ fmt.Println(m.GetOrSet("key2", "value2"))
 ```
 
 ## gslice
+
+### 针对已有数据处理
 
 针对切片数组的一系列操作
 
@@ -160,4 +161,79 @@ fmt.Println(res)
 
 res2 := gslice.Exists([]int{1, 2, 3, 4, 5, 6}, 7)
 fmt.Println(res2)
+```
+
+### 针对新建数据
+
+针对新建数据，可以使用泛型
+
+- Append
+- Insert
+- Remove：支持指定数量或全部
+- RemoveByIndex
+- Pop
+- Shift
+- Copy
+- Range
+- IndexOf
+- Exists
+- Get：支持负索引
+- Length
+
+```
+newS := gslice.NewSlice[int]()
+newS.Append(0, 1, 2, 3, 2, 34, 2)
+fmt.Println(newS.Get(1))
+
+newS.Remove(2, 0)
+fmt.Println(newS.Slice)
+```
+
+# gsync
+
+处理并发的模块
+
+## SyncMap
+
+并发泛型 map，含有以下方法
+
+- Get
+- Set
+- GetOrSet
+- Exists
+- Delete
+- Range
+
+```
+m := gsync.NewMap[int, int]()
+m.Set(1, 1)
+m.Set(2, 2)
+
+v, ok := m.Get(1)
+if ok {
+    fmt.Println(v)
+}
+```
+
+## SyncSlice
+
+并发泛型 slice，含有以下方法
+
+- Append
+- Insert
+- Remove：支持指定数量或全部
+- RemoveByIndex
+- Pop
+- Shift
+- Copy
+- Range
+- IndexOf
+- Exists
+- Get：支持负索引
+- Length
+
+```
+s := gsync.NewSlice[int]()
+s.Append(1, 2, 3, 4)
+fmt.Println(s.Slice)
 ```

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/Leviathangk/go-tool/gtool/generic/gmap"
-	"sync"
 )
 
 func mapDemo() {
@@ -16,14 +15,4 @@ func mapDemo() {
 	})
 
 	fmt.Println(m.GetOrSet("key2", "value2"))
-
-	// 自带的并发 map
-	var ma sync.Map
-	ma.Store("key", "value")
-	fmt.Println(ma.Load("key"))
-
-	ma.Range(func(key, value any) bool {
-		fmt.Printf("%v -> %v\n", key, value)
-		return true
-	})
 }
