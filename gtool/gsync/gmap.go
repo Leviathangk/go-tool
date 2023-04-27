@@ -74,7 +74,7 @@ func (sm *SyncMap[KEY, VALUE]) Range(f func(key KEY, value VALUE)) {
 	sm.Lock.RLock()
 	defer sm.Lock.RUnlock()
 
-	for key, value := range sm.Map {
-		f(key, value)
+	for key := range sm.Map {
+		f(key, sm.Map[key])
 	}
 }

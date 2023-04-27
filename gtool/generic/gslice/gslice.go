@@ -64,8 +64,8 @@ func Copy[T any](s []T) []T {
 
 // Range 遍历
 func Range[T any](s []T, f func(index int, value T)) {
-	for index, value := range s {
-		f(index, value)
+	for index := range s {
+		f(index, s[index])
 	}
 }
 

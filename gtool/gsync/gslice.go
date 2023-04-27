@@ -106,8 +106,8 @@ func (gs *SyncSlice[T]) Range(f func(index int, value T)) {
 	gs.RLock()
 	defer gs.RUnlock()
 
-	for index, value := range gs.Slice {
-		f(index, value)
+	for index := range gs.Slice {
+		f(index, gs.Slice[index])
 	}
 }
 

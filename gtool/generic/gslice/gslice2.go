@@ -76,8 +76,8 @@ func (gs *GSlice[T]) Copy() []T {
 
 // Range 遍历
 func (gs *GSlice[T]) Range(f func(index int, value T)) {
-	for index, value := range gs.Slice {
-		f(index, value)
+	for index := range gs.Slice {
+		f(index, gs.Slice[index])
 	}
 }
 
