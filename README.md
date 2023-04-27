@@ -137,7 +137,7 @@ fmt.Println(m.GetOrSet("key2", "value2"))
 
 ### 针对已有数据处理
 
-针对切片数组的一系列操作
+针对泛型切片数组的一系列操作
 
 - Append
 - Insert
@@ -165,7 +165,7 @@ fmt.Println(res2)
 
 ### 针对新建数据
 
-针对新建数据，可以使用泛型
+针对新建数据，可以使用泛型切片结构体
 
 - Append
 - Insert
