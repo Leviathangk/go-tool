@@ -4,8 +4,10 @@ gtool 是一个使用 go 标准库写的用来简化操作的库
 目前主要实现
 
 - file 文件处理
-- gmap 泛型 map（并发安全）
-- gslice 泛型切片（含有多种切片方法）
+- 泛型 map
+- 泛型 slice
+- 并发泛型 map
+- 并发泛型 slice
 
 # 安装
 
